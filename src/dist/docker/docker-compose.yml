@@ -4,9 +4,17 @@ services:
     image: r.cfcr.io/3tasker1/foodie-order:latest
     ports:
       - "8080:8080"
-
   kafka:
-    image: spotify/kafka
+    image: r.cfcr.io/3tasker1/kafka:latest
     ports:
       - "2181:2181"
       - "9092:9092"
+
+  kafka-ui:
+    image: tchiotludo/kafkahq
+    environment:
+      - "KAFKA_RESTPROXY_URL=kafka:9092"
+    volumes:
+      - "./docker-ui.yml:/app/application.yml"
+    ports:
+      - "8000:8080"
