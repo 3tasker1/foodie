@@ -4,3 +4,9 @@ services:
     image: r.cfcr.io/3tasker1/foodie-order:latest
     ports:
       - "8080:8080"
+
+  kafka:
+    image: spotify/kafka
+    ports:
+      - "2181:2181"
+      - "9092:9092"
