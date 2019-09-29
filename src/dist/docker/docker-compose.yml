@@ -18,3 +18,5 @@ services:
       - "./docker-ui.yml:/app/application.yml"
     ports:
       - "8000:8080"
+    depends_on:
+      - kafka
