@@ -1,4 +1,5 @@
-
+kafka: kafka
+zookeeper: kafka
 
 # use the simple server factory if you only want to run on a single port
 server:
