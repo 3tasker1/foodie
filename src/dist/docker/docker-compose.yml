@@ -15,8 +15,6 @@ services:
 
   kafka-ui:
     image: tchiotludo/kafkahq
-    environment:
-      - "KAFKA_RESTPROXY_URL=kafka:9092"
     volumes:
       - "./docker-ui.yml:/app/application.yml"
     ports:
