@@ -5,7 +5,6 @@ import com.foodie.order.api.OrderRequest;
 import com.foodie.order.dao.orders.OrdersDao;
 
 import java.util.List;
-import java.util.UUID;
 
 public class OrdersService {
 
@@ -21,9 +20,9 @@ public class OrdersService {
     return ordersDao.getOrders();
   }
 
-  public Order newOrder(String userUuid) {
+  public Order newOrder(String userUuid, String restaurantUuid) {
 
-    var orderRequest = new OrderRequest(userUuid, 2000);
+    var orderRequest = new OrderRequest(userUuid, restaurantUuid, 2000);
     return ordersDao.saveOrder(orderRequest);
 
   }

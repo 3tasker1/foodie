@@ -4,6 +4,8 @@ services:
     image: r.cfcr.io/3tasker1/foodie-order:latest
     ports:
       - "8080:8080"
+    depends_on:
+      - kafka
   kafka:
     image: r.cfcr.io/3tasker1/kafka:latest
     environment:
