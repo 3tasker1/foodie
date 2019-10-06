@@ -7,13 +7,13 @@ server:
   applicationContextPath: /
   connector:
     type: http
-    port: 8080
+    port: 8081
 
 # Logging settings.
 logging:
 
   # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
-  level: TRACE
+  level: INFO
 
   # Logger-specific levels.
   loggers:

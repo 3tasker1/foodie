@@ -17,10 +17,6 @@ public class Order {
     this.cost = cost;
   }
 
-  public static Order fromRequest(OrderRequest orderRequest, String uuid) {
-    return new Order(uuid, orderRequest.getUserUuid(), orderRequest.getRestaurantUuid(), orderRequest.getCost());
-  }
-
   public String getUuid() {
     return uuid;
   }
