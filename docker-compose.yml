@@ -18,7 +18,7 @@ services:
   kafka-ui:
     image: tchiotludo/kafkahq
     volumes:
-      - "./docker-ui.yml:/app/application.yml"
+      - "./kafka-ui/application.yml:/app/application.yml"
     ports:
       - "8000:8080"
     depends_on:
