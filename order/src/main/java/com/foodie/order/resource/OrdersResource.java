@@ -27,7 +27,7 @@ public class OrdersResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   public void newOrder(OrderRequestForm orderRequestForm) {
-    ordersService.newOrder(orderRequestForm.getUserUuid());
+    ordersService.newOrder(orderRequestForm.getUserUuid(), orderRequestForm.getRestaurantUuid());
   }
 
 }
