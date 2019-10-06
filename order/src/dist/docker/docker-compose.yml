@@ -1,0 +1,25 @@
+version: '3'
+services:
+  foodie-order:
+    image: r.cfcr.io/3tasker1/foodie-order:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+  kafka:
+    image: r.cfcr.io/3tasker1/kafka:latest
+    environment:
+      - ADVERTISED_HOST=192.168.1.9
+      - ADVERTISED_PORT=9092
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+
+  kafka-ui:
+    image: tchiotludo/kafkahq
+    volumes:
+      - "./docker-ui.yml:/app/application.yml"
+    ports:
+      - "8000:8080"
+    depends_on:
+      - kafka
