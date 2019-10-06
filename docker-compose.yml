@@ -6,14 +6,13 @@ services:
       - "8080:8080"
     depends_on:
       - kafka
-  kafka:
-    image: r.cfcr.io/3tasker1/kafka:latest
-    environment:
-      - ADVERTISED_HOST=192.168.1.9
-      - ADVERTISED_PORT=9092
+
+  foodie-restaurant:
+    image: r.cfcr.io/3tasker1/foodie-restaurant:latest
     ports:
-      - "2181:2181"
-      - "9092:9092"
+      - "8081:8080"
+    depends_on:
+      - kafka
 
   kafka-ui:
     image: tchiotludo/kafkahq
@@ -23,3 +22,12 @@ services:
       - "8000:8080"
     depends_on:
       - kafka
+
+  kafka:
+    image: r.cfcr.io/3tasker1/kafka:latest
+    environment:
+      - ADVERTISED_HOST=192.168.1.9
+      - ADVERTISED_PORT=9092
+    ports:
+      - "2181:2181"
+      - "9092:9092"
