@@ -1,2 +1,4 @@
-/order/build
-/order/.idea
+/*/build
+/*/.idea
+/*/out
+.idea

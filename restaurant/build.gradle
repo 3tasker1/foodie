@@ -1,0 +1,39 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+// Use Java 12 by default
+sourceCompatibility = '12'
+targetCompatibility = '12'
+
+// UTF-8 should be standard by now. So use it!
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+application {
+    mainClassName = 'com.foodie.restaurant.RestaurantApplication'
+}
+// Add Gradle OneJar Plugin, see https://github.com/rholder/gradle-one-jar
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+// Set our project variables
+project.ext {
+    dropwizardVersion = '2.0.0-rc10'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile (
+            'io.dropwizard:dropwizard-core:' + dropwizardVersion,
+            'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion,
+            'io.dropwizard:dropwizard-migrations:' + dropwizardVersion,
+            'io.dropwizard:dropwizard-auth:' + dropwizardVersion,
+            
+            'org.apache.kafka:kafka-clients:2.1.0'
+    )
+}
