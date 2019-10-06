@@ -1,10 +1,12 @@
 package com.foodie.restaurant;
 
+import com.foodie.restaurant.service.OrdersKafkaConsumer;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 public class RestaurantApplication extends Application<RestaurantApplicationConfig> {
+
   @Override
   public void initialize(Bootstrap<RestaurantApplicationConfig> bootstrap) {
 
@@ -12,7 +14,9 @@ public class RestaurantApplication extends Application<RestaurantApplicationConf
 
   @Override
   public void run(RestaurantApplicationConfig configuration, Environment environment) throws Exception {
-
+    var ordersKafkaConsumer = new OrdersKafkaConsumer(configuration.getKafka());
+    var ordersKafkaConsumerThread = new Thread(ordersKafkaConsumer);
+    ordersKafkaConsumerThread.start();
 
   }
 
