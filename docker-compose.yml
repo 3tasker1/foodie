@@ -27,7 +27,7 @@ services:
     image: r.cfcr.io/3tasker1/kafka:latest
     environment:
       - ADVERTISED_HOST=192.168.1.9
-      - ADVERTISED_PORT=9092
+      - PORT=9092
     ports:
       - "2181:2181"
       - "9092:9092"

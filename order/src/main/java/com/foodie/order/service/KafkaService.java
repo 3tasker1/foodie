@@ -6,6 +6,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.util.Properties;
 
 public class KafkaService {
+
 private final Properties kafkaProducerProperties;
 
   public KafkaService(String brokerUrl) {
