@@ -39,15 +39,15 @@ public class OrdersKafkaConsumer implements Runnable{
     var consumer = new KafkaConsumer<String, String>(kafkaConsumerProperties);
     consumer.subscribe(Set.of(CONSUMER_TOPIC));
 
-    ConsumerRecords<String, String> records = consumer.poll(Duration.of(1000, ChronoUnit.MILLIS));
-
     while (true) {
+
+      ConsumerRecords<String, String> records = consumer.poll(Duration.of(1000, ChronoUnit.MILLIS));
       if(!records.isEmpty()) {
         records.forEach(record -> {
           System.out.println(String.format("FOUND: [%s] %s - %s",record.topic(), record.key(), record.value()));
         });
 
-        consumer.commitAsync();
+        consumer.commitSync();
       }
     }
 
