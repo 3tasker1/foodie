@@ -3,10 +3,7 @@ package com.foodie.order.dao.orders;
 import com.foodie.order.api.Order;
 import com.foodie.order.api.OrderRequest;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class LocalOrdersDao implements OrdersDao{
 
@@ -14,14 +11,20 @@ public class LocalOrdersDao implements OrdersDao{
 
 
   @Override
-  public Order saveOrder(OrderRequest orderRequest) {
-    var newOrder = Order.fromRequest(orderRequest, UUID.randomUUID().toString());
-    orders.add(newOrder);
-    return newOrder;
+  public void saveOrder(Order order) {
+    orders.remove(order);
+    orders.add(order);
   }
 
   @Override
   public List<Order> getOrders() {
     return Collections.unmodifiableList(orders);
+  }
+
+  @Override
+  public Optional<Order> findOrder(String uuid) {
+    return orders.stream()
+      .filter(order -> order.getUuid().equals(uuid))
+      .findFirst();
   }
 }

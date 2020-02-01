@@ -1,9 +1,9 @@
 package com.foodie.order;
 
-import com.foodie.order.dao.orders.KafkaOrdersDao;
 import com.foodie.order.dao.orders.LocalOrdersDao;
 import com.foodie.order.resource.OrdersResource;
 import com.foodie.order.service.KafkaService;
+import com.foodie.order.service.OrdersKafkaConsumer;
 import com.foodie.order.service.OrdersService;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -19,8 +19,9 @@ public class OrderApplication extends Application<OrderApplicationConfig> {
   public void run(OrderApplicationConfig configuration, Environment environment) throws Exception {
 
     var kafkaService = new KafkaService(configuration.getKafka());
-    var ordersDao = new KafkaOrdersDao(kafkaService);
-    var ordersService = new OrdersService(ordersDao);
+    var localOrdersDao = new LocalOrdersDao();
+    var ordersService = new OrdersService(localOrdersDao, kafkaService);
+    var ordersKafkaService = new OrdersKafkaConsumer(configuration.getKafka(), ordersService);
     var ordersResource = new OrdersResource(ordersService);
     environment.jersey().register(ordersResource);
 

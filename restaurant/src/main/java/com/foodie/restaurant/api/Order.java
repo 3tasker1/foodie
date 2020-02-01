@@ -1,5 +1,8 @@
 package com.foodie.restaurant.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Order {
 
   private final String uuid;
@@ -10,7 +13,9 @@ public class Order {
 
   private final int cost;
 
-  private Order(String uuid, String userUuid, String restaurantUuid, int cost) {
+  @JsonCreator
+  private Order(@JsonProperty("uuid") String uuid, @JsonProperty("userUuid") String userUuid,
+                @JsonProperty("restaurantUuid") String restaurantUuid, @JsonProperty("cost") int cost) {
     this.uuid = uuid;
     this.userUuid = userUuid;
     this.restaurantUuid = restaurantUuid;

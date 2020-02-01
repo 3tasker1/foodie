@@ -1,16 +1,15 @@
-package com.foodie.restaurant.service;
+package com.foodie.order.service;
 
+import com.foodie.order.api.Order;
+import io.dropwizard.jackson.Jackson;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 import java.util.Properties;
 import java.util.Set;
 
@@ -18,10 +17,13 @@ public class OrdersKafkaConsumer implements Runnable{
 
   private final Properties kafkaConsumerProperties;
 
-  private final static String CONSUMER_GROUP = "RESTAURANT-CONSUMER-GROUP";
-  private final static String CONSUMER_TOPIC = "NEW-ORDER";
+  private final static String CONSUMER_GROUP = "INVALID-ORDER-CONSUMER-GROUP";
+  private final Thread thread;
 
-  public OrdersKafkaConsumer(String brokerUrl) {
+  private final OrdersService ordersService;
+
+  public OrdersKafkaConsumer(String brokerUrl, OrdersService ordersService) {
+    this.ordersService = ordersService;
 
     var serializer = StringDeserializer.class.getName();
     kafkaConsumerProperties = new Properties();
@@ -30,6 +32,9 @@ public class OrdersKafkaConsumer implements Runnable{
     kafkaConsumerProperties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, serializer);
     kafkaConsumerProperties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, CONSUMER_GROUP);
 
+    thread = new Thread(this);
+    thread.start();
+
   }
 
 
@@ -37,18 +42,25 @@ public class OrdersKafkaConsumer implements Runnable{
   @Override
   public void run() {
     var consumer = new KafkaConsumer<String, String>(kafkaConsumerProperties);
-    consumer.subscribe(Set.of(CONSUMER_TOPIC));
+    consumer.subscribe(Set.of(KafkaService.INVALID_ORDERS_TOPIC));
 
     while (true) {
 
-      ConsumerRecords<String, String> records = consumer.poll(Duration.of(1000, ChronoUnit.MILLIS));
-      if(!records.isEmpty()) {
-        records.forEach(record -> {
-          System.out.println(String.format("FOUND: [%s] %s - %s",record.topic(), record.key(), record.value()));
-        });
+      try {
 
-        consumer.commitSync();
+        ConsumerRecords<String, String> records = consumer.poll(Duration.of(1000, ChronoUnit.MILLIS));
+        if (!records.isEmpty()) {
+          records.forEach(record -> {
+            var orderOptional = ordersService.findOrder(record.key());
+            orderOptional.ifPresent(ordersService::markOrderAsInvalid);
+          });
+
+          consumer.commitSync();
+        }
+      } catch (Exception e) {
+        System.out.println(e);
       }
+
     }
 
   }

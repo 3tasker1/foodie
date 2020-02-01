@@ -1,5 +1,8 @@
 package com.foodie.order.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.foodie.order.api.Order;
+import io.dropwizard.jackson.Jackson;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
@@ -8,6 +11,9 @@ import java.util.Properties;
 public class KafkaService {
 
 private final Properties kafkaProducerProperties;
+
+  public final static String NEW_ORDERS_TOPIC = "NEW-ORDERS";
+  public final static String INVALID_ORDERS_TOPIC = "INVALID-ORDERS";
 
   public KafkaService(String brokerUrl) {
 
@@ -34,5 +40,15 @@ private final Properties kafkaProducerProperties;
       }
     });
 
+  }
+
+  public void publish(String topic, Order order) {
+
+    try {
+      var orderJsonString = Jackson.newObjectMapper().writer().forType(Order.class).writeValueAsString(order);
+      publish(topic, order.getUuid(), orderJsonString);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException("Cannot convert Order to JSON: " + order);
+    }
   }
 }

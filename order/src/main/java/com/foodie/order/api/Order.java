@@ -1,5 +1,8 @@
 package com.foodie.order.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Order {
 
   private final String uuid;
@@ -10,15 +13,21 @@ public class Order {
 
   private final int cost;
 
-  private Order(String uuid, String userUuid, String restaurantUuid, int cost) {
+  private OrderStatus orderStatus;
+
+  @JsonCreator
+  public Order(@JsonProperty("uuid") String uuid, @JsonProperty("userUuid") String userUuid,
+                @JsonProperty("restaurantUuid") String restaurantUuid, @JsonProperty("cost") int cost,
+                @JsonProperty("orderStatus") OrderStatus orderStatus) {
     this.uuid = uuid;
     this.userUuid = userUuid;
     this.restaurantUuid = restaurantUuid;
     this.cost = cost;
+    this.orderStatus = orderStatus;
   }
 
   public static Order fromRequest(OrderRequest orderRequest, String uuid) {
-    return new Order(uuid, orderRequest.getUserUuid(), orderRequest.getRestaurantUuid(), orderRequest.getCost());
+    return new Order(uuid, orderRequest.getUserUuid(), orderRequest.getRestaurantUuid(), orderRequest.getCost(), OrderStatus.CREATED);
   }
 
   public String getUuid() {
@@ -37,6 +46,14 @@ public class Order {
     return restaurantUuid;
   }
 
+  public OrderStatus getOrderStatus() {
+    return orderStatus;
+  }
+
+  public void setOrderStatus(OrderStatus orderStatus) {
+    this.orderStatus = orderStatus;
+  }
+
   @Override
   public String toString() {
     return "Order{" +
@@ -44,6 +61,7 @@ public class Order {
       ", userUuid='" + userUuid + '\'' +
       ", restaurantUuid='" + restaurantUuid + '\'' +
       ", cost=" + cost +
+      ", orderStatus=" + orderStatus +
       '}';
   }
 }

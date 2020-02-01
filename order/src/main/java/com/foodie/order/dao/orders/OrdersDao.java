@@ -4,11 +4,14 @@ import com.foodie.order.api.Order;
 import com.foodie.order.api.OrderRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrdersDao {
 
-  Order saveOrder(OrderRequest orderRequest);
+  void saveOrder(Order order);
 
   List<Order> getOrders();
+
+  Optional<Order> findOrder(String uuid);
 
 }
