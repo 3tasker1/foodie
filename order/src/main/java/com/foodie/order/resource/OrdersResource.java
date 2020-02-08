@@ -8,7 +8,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/orders")
+@Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 public class OrdersResource {
 
