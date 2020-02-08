@@ -1,7 +1,6 @@
 package com.foodie.order.dao.orders;
 
 import com.foodie.order.api.Order;
-import com.foodie.order.api.OrderRequest;
 
 import java.util.*;
 

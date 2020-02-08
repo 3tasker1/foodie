@@ -26,10 +26,6 @@ public class Order {
     this.orderStatus = orderStatus;
   }
 
-  public static Order fromRequest(OrderRequest orderRequest, String uuid) {
-    return new Order(uuid, orderRequest.getUserUuid(), orderRequest.getRestaurantUuid(), orderRequest.getCost(), OrderStatus.CREATED);
-  }
-
   public String getUuid() {
     return uuid;
   }
